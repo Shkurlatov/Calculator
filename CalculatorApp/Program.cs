@@ -6,7 +6,7 @@ namespace CalculatorApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Test commit, after reinstall Visual Studio.");
         }
     }
 }
