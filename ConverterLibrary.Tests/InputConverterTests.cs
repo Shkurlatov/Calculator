@@ -11,7 +11,7 @@ namespace ConverterLibrary.Tests
         public void IsExpressionComplete_TakesVariousStrings_ReturnsFalse(string sourceLine, string message)
         {
             // arrange
-            Converter converter = new InputConverter();
+            InputConverter converter = new InputConverter();
 
             // act
             bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
@@ -26,7 +26,7 @@ namespace ConverterLibrary.Tests
         public void IsExpressionComplete_TakesVariousStrings_ReturnsTrue(string sourceLine, List<MathMember> expression)
         {
             // arrange
-            Converter converter = new InputConverter();
+            InputConverter converter = new InputConverter();
 
             // act
             bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
@@ -41,17 +41,39 @@ namespace ConverterLibrary.Tests
         {
             yield return new object[] { null, "The string is null or empty" };
             yield return new object[] { "", "The string is null or empty" };
-            yield return new object[] { " ", "The string contains not acceptable symbols" };
-            yield return new object[] { "+1+2", "Wrong math operator at the begining of the string" };
-            yield return new object[] { "1++2", "Missing value after math operation" };
-            yield return new object[] { "1+2.2.2", "Wrong number format, the parsing ended unsuccessefully" };
+            yield return new object[] { "1 ( 2", "The string contains not acceptable symbols" };
+            yield return new object[] { "1  2 + 12", "The number value contains the space inside" };
+            yield return new object[] { "1 + 2.2.2", "Wrong number format, the parsing ended unsuccessefully" };
+            yield return new object[] { "* 1 + 2", "Wrong math operator at the begining of the string" };
+            yield return new object[] { "1 + 2 +", "The math operator at the end of the string" };
+            yield return new object[] { "+ + 1 + 2", "Two math operators at the begining of the string" };
+            yield return new object[] { "1 + * 2", "Operator of multiplication or division after another math operator" };
+            yield return new object[] { "1 + + + 2", "Three math operators in a row" };
         }
 
         public static IEnumerable<object[]> ExpressionCompleteTestsData()
         {
             yield return new object[]
             {
-                "1.2-4.8+8.05/5.115*3",
+                "2++2",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None, 0),
+                    new MathMember(2, MathOperation.Addition, 0),
+                }
+            };
+            yield return new object[]
+            {
+                "2*+2",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None, 0),
+                    new MathMember(2, MathOperation.Multiplication, 0),
+                }
+            };
+            yield return new object[]
+            {
+                "1.2 - 4.8 + 8.05 / 5.115 * 3",
                 new List<MathMember>
                 {
                     new MathMember(1.2m, MathOperation.None),
@@ -63,7 +85,7 @@ namespace ConverterLibrary.Tests
             };
             yield return new object[]
             {
-                "-1-2+4/1*2+1",
+                "- 1 - 2 + 4 / 1 * 2 + 1",
                 new List<MathMember>
                 {
                     new MathMember(-1, MathOperation.None),
@@ -77,7 +99,7 @@ namespace ConverterLibrary.Tests
             };
             yield return new object[]
             {
-                "4-2/2+8/4*5*3",
+                "4 - 2 / 2 + 8 / 4 * 5 * 3",
                 new List<MathMember>
                 {
                     new MathMember(4, MathOperation.None),

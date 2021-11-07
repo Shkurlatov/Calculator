@@ -18,16 +18,9 @@ namespace CalculatorApp
             Console.WriteLine(result + "\n");
         }
 
-        public void PrintFileResults(bool isResultsSaved, string[] results)
+        public void PrintFileResult(string fileSavingInfo, string[] results)
         {
-            if (!isResultsSaved)
-            {
-                Console.WriteLine("\nFailed to save the file with the processing results\n");
-            }
-            else
-            {
-                Console.WriteLine("\nThe file with the processing results has been succesefully saved\n");
-            }
+            Console.WriteLine(fileSavingInfo);
 
             Console.WriteLine("The processing results:\n");
 

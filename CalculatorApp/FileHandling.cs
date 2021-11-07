@@ -24,17 +24,17 @@ namespace CalculatorApp
 
             if (content == null || content.Any(x => x == null))
             {
-                throw new ArgumentNullException($"The file content cannot be null or empty");
+                throw new ArgumentNullException("The file content cannot be null or empty");
             }
 
             return content;
         }
 
-        public bool IsResultSaved(string[] results)
+        public string WriteResult(string[] result)
         {
-            if (results == null)
+            if (result == null)
             {
-                throw new ArgumentNullException($"Attempt to write nothing into a file");
+                throw new ArgumentNullException("Attempt to write nothing into a file");
             }
 
             try
@@ -43,17 +43,17 @@ namespace CalculatorApp
 
                 using (StreamWriter sw = File.CreateText(path))
                 {
-                    foreach (var result in results)
+                    foreach (string line in result)
                     {
-                        sw.WriteLine(result);
+                        sw.WriteLine(line);
                     }
                 }
 
-                return true;
+                return $"\nThe file with the processing results has been succesefully saved\nPath: '{path}'\n";
             }
-            catch
+            catch (IOException e)
             {
-                return false;
+                return $"The file could not be saved: '{e}'";
             }           
         }
     }

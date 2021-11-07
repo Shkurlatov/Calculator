@@ -8,7 +8,7 @@ namespace CalculatorApp
         static void Main(string[] args)
         {
             UserConsole console = new UserConsole();
-            Converter converter;
+            InputConverter converter;
             Processor processor;
 
             if (args.Length > 0)
@@ -27,14 +27,14 @@ namespace CalculatorApp
                 processor = new FileProcessor();
 
                 string[] content = fileHandling.ReadContent(args);
-                string[] results = new string[content.Length];
+                string[] result = new string[content.Length];
 
                 for (int i = 0; i < content.Length; i++)
                 {
-                    results[i] = CalculationResult(content[i]);
+                    result[i] = CalculationResult(content[i]);
                 }
 
-                console.PrintFileResults(fileHandling.IsResultSaved(results), results);
+                console.PrintFileResult(fileHandling.WriteResult(result), result);
             }
 
             void ProcessUserInput()
