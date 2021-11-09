@@ -79,8 +79,8 @@ namespace ConverterLibrary.Tests
                 "2++2",
                 new List<MathMember>
                 {
-                    new MathMember(2, MathOperation.None, 0),
-                    new MathMember(2, MathOperation.Addition, 0),
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(2, MathOperation.Addition),
                 }
             };
             yield return new object[]
@@ -88,8 +88,8 @@ namespace ConverterLibrary.Tests
                 "2*+2",
                 new List<MathMember>
                 {
-                    new MathMember(2, MathOperation.None, 0),
-                    new MathMember(2, MathOperation.Multiplication, 0),
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(2, MathOperation.Multiplication),
                 }
             };
             yield return new object[]
@@ -130,8 +130,8 @@ namespace ConverterLibrary.Tests
                 "1 000.1",
                 new List<MathMember>
                 {
-                    new MathMember(1000.1m, MathOperation.None, 0),
-                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                    new MathMember(1000.1m, MathOperation.None),
+                    new MathMember(1000.1m, MathOperation.Addition)
                 }
             };
             yield return new object[]
@@ -140,8 +140,8 @@ namespace ConverterLibrary.Tests
                 "1_000.1",
                 new List<MathMember>
                 {
-                    new MathMember(1000.1m, MathOperation.None, 0),
-                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                    new MathMember(1000.1m, MathOperation.None),
+                    new MathMember(1000.1m, MathOperation.Addition)
                 }
             };
             yield return new object[]
@@ -150,8 +150,8 @@ namespace ConverterLibrary.Tests
                 "1 000,1",
                 new List<MathMember>
                 {
-                    new MathMember(1000.1m, MathOperation.None, 0),
-                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                    new MathMember(1000.1m, MathOperation.None),
+                    new MathMember(1000.1m, MathOperation.Addition)
                 }
             };
             yield return new object[]
@@ -160,8 +160,8 @@ namespace ConverterLibrary.Tests
                 "1,000.1",
                 new List<MathMember>
                 {
-                    new MathMember(1000.1m, MathOperation.None, 0),
-                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                    new MathMember(1000.1m, MathOperation.None),
+                    new MathMember(1000.1m, MathOperation.Addition)
                 }
             };
             yield return new object[]
@@ -170,8 +170,8 @@ namespace ConverterLibrary.Tests
                 "1000;1",
                 new List<MathMember>
                 {
-                    new MathMember(1000.1m, MathOperation.None, 0),
-                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                    new MathMember(1000.1m, MathOperation.None),
+                    new MathMember(1000.1m, MathOperation.Addition)
                 }
             };
         }

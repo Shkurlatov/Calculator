@@ -5,11 +5,35 @@ using MathUnitsLibrary;
 
 namespace ProcessorLibrary
 {
-    public abstract class Processor
+    public class Processor
     {
-        public abstract string GetResult(List<MathMember> expression);
+        public string GetResult(List<MathMember> expression)
+        {
+            CheckExpression(expression);
 
-        protected void CheckExpression(List<MathMember> expression)
+            for (int priority = expression.Max(x => x.Priority); priority >= 0; priority--)
+            {
+                for (int i = 1; i < expression.Count; i++)
+                {
+                    if (expression[i].Priority == priority)
+                    {
+                        if (expression[i].Operation == MathOperation.Division && expression[i].Value == 0)
+                        {
+                            return "The result is not achievable, division by zero occured";
+                        }
+
+                        expression[i - 1].Value = Calculate(expression[i].Operation, expression[i - 1].Value, expression[i].Value);
+                        expression.Remove(expression[i]);
+
+                        i--;
+                    }
+                }
+            }
+
+            return expression[0].Value.ToString();
+        }
+
+        private void CheckExpression(List<MathMember> expression)
         {
             if (expression == null || expression.Any(x => x == null))
             {
@@ -27,7 +51,7 @@ namespace ProcessorLibrary
             }
         }
 
-        protected decimal Calculate(MathOperation operation, decimal firstValue, decimal secondValue) => operation switch
+        private decimal Calculate(MathOperation operation, decimal firstValue, decimal secondValue) => operation switch
         {
             MathOperation.Subtraction => firstValue - secondValue,
             MathOperation.Addition => firstValue + secondValue,

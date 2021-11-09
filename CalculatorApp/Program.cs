@@ -8,8 +8,8 @@ namespace CalculatorApp
         static void Main(string[] args)
         {
             UserConsole console = new UserConsole();
+            Processor processor = new Processor();
             InputConverter converter;
-            Processor processor;
 
             if (args.Length > 0)
             {
@@ -24,7 +24,6 @@ namespace CalculatorApp
             {
                 FileHandling fileHandling = new FileHandling();
                 converter = new FileConverter();
-                processor = new FileProcessor();
 
                 string[] content = fileHandling.ReadContent(args);
                 string[] result = new string[content.Length];
@@ -40,7 +39,6 @@ namespace CalculatorApp
             void ProcessUserInput()
             {
                 converter = new InputConverter();
-                processor = new InputProcessor();
 
                 string input = console.GetInput();
 
