@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Globalization;
 using MathUnitsLibrary;
 
 namespace ConverterLibrary
@@ -13,8 +12,6 @@ namespace ConverterLibrary
 
         protected Filter _filter;
 
-        protected string _source;
-
         public InputConverter()
         {
             _filter = new Filter();
@@ -23,53 +20,28 @@ namespace ConverterLibrary
 
         public bool IsExpressionComplete(string source)
         {
-            _source = source;
-
-            if (!IsSourceAcceptable())
+            if (source == null)
             {
-                return false;
+                throw new ArgumentNullException("IsExpressionComplete received a null argument!");
             }
 
-            return IsSourceConverted(SplitSource());
-        }
-
-        protected bool IsSourceAcceptable()
-        {
-            if (string.IsNullOrEmpty(_source))
-            {
-                ServiceMessage = _filter.NullOrEmpty;
-                return false;
-            }
-
-            if (!_filter.AcceptableChars.IsMatch(_source))
-            {
-                ServiceMessage = _filter.WrongSymbol;
-                return false;
-            }
-
-            if (_filter.SpaceInsidePattern.IsMatch(_source))
-            {
-                ServiceMessage = _filter.SpaceInside;
-                return false;
-            }
-
-            _source = _filter.AllWhiteSpaces.Replace(_source, string.Empty);
+            source = _filter.ExtraWhiteSpaces.Replace(source, string.Empty);
 
             foreach (var pattern in _filter.Patterns)
             {
-                if (pattern.Key.IsMatch(_source))
+                if (pattern.Key.IsMatch(source))
                 {
                     ServiceMessage = pattern.Value;
                     return false;
                 }
             }
 
-            return true;
+            return IsSourceConverted(SplitSource(source));
         }
 
-        protected List<string> SplitSource()
+        protected List<string> SplitSource(string source)
         {
-            List<string> sections = _filter.Separators.Split(_source).ToList();
+            List<string> sections = _filter.Separators.Split(source).ToList();
 
             for (int i = 0; i < sections.Count - 2; i += 2)
             {
@@ -117,7 +89,7 @@ namespace ConverterLibrary
                 preparedSection = operation[1] + preparedSection;
             }
 
-            if (decimal.TryParse(preparedSection, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal value))
+            if (decimal.TryParse(preparedSection, out decimal value))
             {
                 MathExpression.Add(new MathMember(value, GetMathOperation(operation[0])));
 

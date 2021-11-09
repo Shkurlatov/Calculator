@@ -37,13 +37,34 @@ namespace ConverterLibrary.Tests
             Assert.Null(converter.ServiceMessage);
         }
 
+        [Theory]
+        [MemberData(nameof(ExpressionUndefinedTestsData))]
+        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsLocalCultureResult(string sourceLine, string formatExample, List<MathMember> expression)
+        {
+            // arrange
+            InputConverter converter = new FileConverter();
+            string message = "Invalid expression format, the processing ended unsuccessefully";
+
+            // act
+            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+
+            // assert
+            if (decimal.TryParse(formatExample, out decimal value))
+            {
+                Assert.True(isExpressionComplete);
+                Assert.Equal(expression, converter.MathExpression);
+            }
+            else
+            {
+                Assert.False(isExpressionComplete);
+                Assert.Equal(message, converter.ServiceMessage);
+            }
+        }
+
         public static IEnumerable<object[]> ExpressionFailedTestsData()
         {
-            yield return new object[] { null, "The string is null or empty" };
-            yield return new object[] { "", "The string is null or empty" };
-            yield return new object[] { "1 ? 2", "The string contains not acceptable symbols" };
-            yield return new object[] { "1  2 + 12", "The number value contains the space inside" };
-            yield return new object[] { "1 + 2.2.2", "Wrong number format, the parsing ended unsuccessefully" };
+            yield return new object[] { "", "" };
+            yield return new object[] { "   ", "" };
             yield return new object[] { "* 1 + 2", "Wrong math operator at the begining of the string" };
             yield return new object[] { "1 + 2 +", "The math operator at the end of the string" };
             yield return new object[] { "+ + 1 + 2", "Two math operators at the begining of the string" };
@@ -67,7 +88,7 @@ namespace ConverterLibrary.Tests
                 new List<MathMember>
                 {
                     new MathMember(2, MathOperation.None, 0),
-                    new MathMember(2, MathOperation.Addition, 0),
+                    new MathMember(2, MathOperation.Addition, 0)
                 }
             };
             yield return new object[]
@@ -76,19 +97,7 @@ namespace ConverterLibrary.Tests
                 new List<MathMember>
                 {
                     new MathMember(2, MathOperation.None, 0),
-                    new MathMember(2, MathOperation.Multiplication, 0),
-                }
-            };
-            yield return new object[]
-            {
-                "1.2 - 4.8 + 8.05 / 5.115 * 3",
-                new List<MathMember>
-                {
-                    new MathMember(1.2m, MathOperation.None, 0),
-                    new MathMember(4.8m, MathOperation.Subtraction, 0),
-                    new MathMember(8.05m, MathOperation.Addition, 0),
-                    new MathMember(5.115m, MathOperation.Division, 0),
-                    new MathMember(3, MathOperation.Multiplication, 0)
+                    new MathMember(2, MathOperation.Multiplication, 0)
                 }
             };
             yield return new object[]
@@ -98,7 +107,7 @@ namespace ConverterLibrary.Tests
                 {
                     new MathMember(1, MathOperation.None, 0),
                     new MathMember(2, MathOperation.Multiplication, 1),
-                    new MathMember(3, MathOperation.Addition, 0),
+                    new MathMember(3, MathOperation.Addition, 0)
                 }
             };
             yield return new object[]
@@ -128,6 +137,60 @@ namespace ConverterLibrary.Tests
                     new MathMember(4, MathOperation.Division, 2),
                     new MathMember(5, MathOperation.Multiplication, 2),
                     new MathMember(3, MathOperation.Multiplication, 3)
+                }
+            };
+        }
+
+        public static IEnumerable<object[]> ExpressionUndefinedTestsData()
+        {
+            yield return new object[]
+            {
+                "1 000.1 + 1 000.1",
+                "1 000.1",
+                new List<MathMember>
+                {
+                    new MathMember(1000.1m, MathOperation.None, 0),
+                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                }
+            };
+            yield return new object[]
+            {
+                "1_000.1 + 1_000.1",
+                "1_000.1",
+                new List<MathMember>
+                {
+                    new MathMember(1000.1m, MathOperation.None, 0),
+                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                }
+            };
+            yield return new object[]
+            {
+                "1 000,1 + 1 000,1",
+                "1 000,1",
+                new List<MathMember>
+                {
+                    new MathMember(1000.1m, MathOperation.None, 0),
+                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                }
+            };
+            yield return new object[]
+            {
+                "1,000.1 + 1,000.1",
+                "1,000.1",
+                new List<MathMember>
+                {
+                    new MathMember(1000.1m, MathOperation.None, 0),
+                    new MathMember(1000.1m, MathOperation.Addition, 0)
+                }
+            };
+            yield return new object[]
+            {
+                "1000;1 + 1000;1",
+                "1000;1",
+                new List<MathMember>
+                {
+                    new MathMember(1000.1m, MathOperation.None, 0),
+                    new MathMember(1000.1m, MathOperation.Addition, 0)
                 }
             };
         }

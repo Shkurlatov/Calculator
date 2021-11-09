@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using MathUnitsLibrary;
 
@@ -69,7 +68,7 @@ namespace ConverterLibrary
                 preparedSection = operation[1] + preparedSection;
             }
 
-            if (decimal.TryParse(preparedSection, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal value))
+            if (decimal.TryParse(preparedSection, out decimal value))
             {
                 MathExpression.Add(new MathMember(value, GetMathOperation(operation[0]), priority));
 

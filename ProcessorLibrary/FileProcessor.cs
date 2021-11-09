@@ -33,7 +33,7 @@ namespace ProcessorLibrary
                 }
             }
 
-            return expression[0].Value.ToString(CultureInfo.InvariantCulture);
+            return expression[0].Value.ToString();
         }
     }
 }

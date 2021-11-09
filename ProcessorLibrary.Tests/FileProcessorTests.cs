@@ -24,7 +24,7 @@ namespace ProcessorLibrary.Tests
         {
             yield return new object[]
             {
-                "1.1214076246334310850439882697",
+                1.1214076246334310850439882697m.ToString(),
                 new List<MathMember>
                 {
                     new MathMember(1.2m, MathOperation.None, 0),
@@ -36,7 +36,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                "19",
+                19m.ToString(),
                 new List<MathMember>
                 {
                     new MathMember(-1, MathOperation.None, 0),
@@ -51,7 +51,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                "31",
+                31m.ToString(),
                 new List<MathMember>
                 {
                     new MathMember(4, MathOperation.None, 0),

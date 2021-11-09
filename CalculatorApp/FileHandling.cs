@@ -6,6 +6,9 @@ namespace CalculatorApp
 {
     class FileHandling
     {
+        private string _userDirectory;
+
+
         public string[] ReadContent(string[] args)
         {
             string path = String.Join(' ', args);
@@ -27,6 +30,8 @@ namespace CalculatorApp
                 throw new ArgumentNullException("The file content cannot be null or empty");
             }
 
+            _userDirectory = Path.GetDirectoryName(path);
+
             return content;
         }
 
@@ -39,7 +44,7 @@ namespace CalculatorApp
 
             try
             {
-                string path = Path.GetFullPath(@"..\..\..\result.txt");
+                string path = _userDirectory + @"\result.txt";
 
                 using (StreamWriter sw = File.CreateText(path))
                 {
