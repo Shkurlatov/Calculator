@@ -26,14 +26,12 @@ namespace MathUnitsLibrary
 
         private int OperationPriority(MathOperation operation)
         {
-            int operationType = 0;
-
             if (operation > MathOperation.Addition)
             {
-                operationType++;
+                return 1;
             }
 
-            return operationType;
+            return 0;
         }
 
         public override bool Equals(object obj)

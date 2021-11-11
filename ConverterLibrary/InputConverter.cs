@@ -72,7 +72,7 @@ namespace ConverterLibrary
 
             for (int i = 1; i < sections.Count; i += 2)
             {
-                if (!IsMathMemberAdded(sections[i], sections[i - 1]))
+                if (!TryAddMathMember(sections[i], sections[i - 1]))
                 {
                     ServiceMessage = _filter.BadValue;
                     return false;
@@ -82,7 +82,7 @@ namespace ConverterLibrary
             return true;
         }
 
-        private bool IsMathMemberAdded(string preparedSection, string operation)
+        private bool TryAddMathMember(string preparedSection, string operation)
         {
             if (operation.Length == 2)
             {

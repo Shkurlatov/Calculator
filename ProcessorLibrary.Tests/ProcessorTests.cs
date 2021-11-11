@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xunit;
 using MathUnitsLibrary;
 
@@ -8,23 +9,37 @@ namespace ProcessorLibrary.Tests
     {
         [Theory]
         [MemberData(nameof(GetResultTestsData))]
-        public void GetResult_TakesVariousExpressions_ReturnsResult(string expected, List<MathMember> expression)
+        public void GetResult_TakesVariousExpressions_ReturnsResult(decimal expected, List<MathMember> expression)
         {
             // arrange
             Processor processor = new Processor();
 
             // act
-            string result = processor.GetResult(expression);
+            decimal result = processor.GetResult(expression);
 
             // assert
             Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [MemberData(nameof(DivideByZeroTestsData))]
+        public void GetResult_TakesVariousExpressions_DivideByZeroHappens(List<MathMember> expression)
+        {
+            // arrange
+            Processor processor = new Processor();
+
+            // act
+            void act() => processor.GetResult(expression);
+
+            // assert
+            Exception exception = Assert.Throws<DivideByZeroException>(act);
         }
 
         public static IEnumerable<object[]> GetResultTestsData()
         {
             yield return new object[]
             {
-                1.1214076246334310850439882697m.ToString(),
+                1.1214076246334310850439882697m,
                 new List<MathMember>
                 {
                     new MathMember(1.2m, MathOperation.None),
@@ -36,7 +51,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                6m.ToString(),
+                6m,
                 new List<MathMember>
                 {
                     new MathMember(-1, MathOperation.None),
@@ -50,7 +65,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                33m.ToString(),
+                33m,
                 new List<MathMember>
                 {
                     new MathMember(4, MathOperation.None),
@@ -64,16 +79,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                "The result is not achievable, division by zero occured",
-                new List<MathMember>
-                {
-                    new MathMember(2, MathOperation.None),
-                    new MathMember(0, MathOperation.Division)
-                }
-            };
-            yield return new object[]
-            {
-                1.1214076246334310850439882697m.ToString(),
+                1.1214076246334310850439882697m,
                 new List<MathMember>
                 {
                     new MathMember(1.2m, MathOperation.None, 0),
@@ -85,7 +91,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                19m.ToString(),
+                19m,
                 new List<MathMember>
                 {
                     new MathMember(-1, MathOperation.None, 0),
@@ -100,7 +106,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                31m.ToString(),
+                31m,
                 new List<MathMember>
                 {
                     new MathMember(4, MathOperation.None, 0),
@@ -112,9 +118,20 @@ namespace ProcessorLibrary.Tests
                     new MathMember(3, MathOperation.Multiplication, 3)
                 }
             };
+        }
+
+        public static IEnumerable<object[]> DivideByZeroTestsData()
+        {
             yield return new object[]
             {
-                "The result is not achievable, division by zero occured",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(0, MathOperation.Division)
+                }
+            };
+            yield return new object[]
+            {
                 new List<MathMember>
                 {
                     new MathMember(2, MathOperation.None, 0),

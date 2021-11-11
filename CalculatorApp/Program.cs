@@ -1,5 +1,6 @@
 ﻿using ConverterLibrary;
 using ProcessorLibrary;
+using System;
 
 namespace CalculatorApp
 {
@@ -52,13 +53,26 @@ namespace CalculatorApp
 
             string CalculationResult(string line)
             {
-                if (converter.IsExpressionComplete(line))
+                string calculationResult = line + " = ";
+
+                bool isExpressionComplete = converter.IsExpressionComplete(line);
+
+                if (isExpressionComplete)
                 {
-                    return line + " = " + processor.GetResult(converter.MathExpression);
+                    var mathExpression = converter.MathExpression;
+                    
+                    try
+                    {
+                        return calculationResult += processor.GetResult(mathExpression).ToString();
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        return calculationResult += "The result is not achievable, division by zero occured";
+                    }
                 }
                 else
                 {
-                    return line + " = " + converter.ServiceMessage;
+                    return calculationResult += converter.ServiceMessage;
                 }
             }
         }

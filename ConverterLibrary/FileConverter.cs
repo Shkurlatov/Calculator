@@ -43,7 +43,7 @@ namespace ConverterLibrary
                     nextPriorityLayer++;
                 }
 
-                if (!IsMathMemberAdded(sections[i].Substring(indent, length), sections[i - 1], priorityLayer))
+                if (!TryAddMathMember(sections[i].Substring(indent, length), sections[i - 1], priorityLayer))
                 {
                     ServiceMessage = _filter.BadValue;
                     return false;
@@ -61,7 +61,7 @@ namespace ConverterLibrary
             return true;
         }
 
-        private bool IsMathMemberAdded(string preparedSection, string operation, int priority)
+        private bool TryAddMathMember(string preparedSection, string operation, int priority)
         {
             if (operation.Length == 2)
             {

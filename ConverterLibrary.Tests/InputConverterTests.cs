@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Xunit;
 using MathUnitsLibrary;
+using System.Globalization;
 
 namespace ConverterLibrary.Tests
 {
@@ -38,27 +39,41 @@ namespace ConverterLibrary.Tests
         }
 
         [Theory]
-        [MemberData(nameof(ExpressionUndefinedTestsData))]
-        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsLocalCultureResult(string sourceLine, string formatExample, List<MathMember> expression)
+        [MemberData(nameof(WrongNumberFormatTestsData))]
+        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsFalse(string sourceLine, CultureInfo culture)
         {
             // arrange
-            InputConverter converter = new FileConverter();
+            InputConverter converter = new InputConverter();
+            CultureInfo.CurrentCulture = culture;
             string message = "Invalid expression format, the processing ended unsuccessefully";
 
             // act
             bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
 
             // assert
-            if (decimal.TryParse(formatExample, out decimal value))
-            {
-                Assert.True(isExpressionComplete);
-                Assert.Equal(expression, converter.MathExpression);
-            }
-            else
-            {
-                Assert.False(isExpressionComplete);
-                Assert.Equal(message, converter.ServiceMessage);
-            }
+            Assert.False(isExpressionComplete);
+            Assert.Equal(message, converter.ServiceMessage);
+        }
+
+        [Theory]
+        [MemberData(nameof(RightNumberFormatTestsData))]
+        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsTrue(string sourceLine, CultureInfo culture)
+        {
+            // arrange
+            InputConverter converter = new InputConverter();
+            CultureInfo.CurrentCulture = culture;
+            List <MathMember> expression = new List<MathMember>
+                {
+                    new MathMember(1000.10m, MathOperation.None),
+                    new MathMember(1000.10m, MathOperation.Addition),
+                };
+
+            // act
+            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+
+            // assert
+            Assert.True(isExpressionComplete);
+            Assert.Equal(expression, converter.MathExpression);
         }
 
         public static IEnumerable<object[]> ExpressionFailedTestsData()
@@ -122,57 +137,41 @@ namespace ConverterLibrary.Tests
             };
         }
 
-        public static IEnumerable<object[]> ExpressionUndefinedTestsData()
+        public static IEnumerable<object[]> WrongNumberFormatTestsData()
         {
             yield return new object[]
             {
-                "1 000.1 + 1 000.1",
-                "1 000.1",
-                new List<MathMember>
-                {
-                    new MathMember(1000.1m, MathOperation.None),
-                    new MathMember(1000.1m, MathOperation.Addition)
-                }
+                "1 000,10 + 1 000,10",
+                new CultureInfo("en-US")
             };
             yield return new object[]
             {
-                "1_000.1 + 1_000.1",
-                "1_000.1",
-                new List<MathMember>
-                {
-                    new MathMember(1000.1m, MathOperation.None),
-                    new MathMember(1000.1m, MathOperation.Addition)
-                }
+                "1,000.10 + 1,000.10",
+                new CultureInfo("es-ES")
             };
             yield return new object[]
             {
-                "1 000,1 + 1 000,1",
-                "1 000,1",
-                new List<MathMember>
-                {
-                    new MathMember(1000.1m, MathOperation.None),
-                    new MathMember(1000.1m, MathOperation.Addition)
-                }
+                "1.000,10 + 1.000,10",
+                new CultureInfo("fr-FR")
+            };
+        }
+
+        public static IEnumerable<object[]> RightNumberFormatTestsData()
+        {
+            yield return new object[]
+{
+                "1,000.10 + 1,000.10",
+                new CultureInfo("en-US")
+};
+            yield return new object[]
+            {
+                "1.000,10 + 1.000,10",
+                new CultureInfo("es-ES")
             };
             yield return new object[]
             {
-                "1,000.1 + 1,000.1",
-                "1,000.1",
-                new List<MathMember>
-                {
-                    new MathMember(1000.1m, MathOperation.None),
-                    new MathMember(1000.1m, MathOperation.Addition)
-                }
-            };
-            yield return new object[]
-            {
-                "1000;1 + 1000;1",
-                "1000;1",
-                new List<MathMember>
-                {
-                    new MathMember(1000.1m, MathOperation.None),
-                    new MathMember(1000.1m, MathOperation.Addition)
-                }
+                "1 000,10 + 1 000,10",
+                new CultureInfo("fr-FR")
             };
         }
     }

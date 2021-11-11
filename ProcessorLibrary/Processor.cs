@@ -7,7 +7,7 @@ namespace ProcessorLibrary
 {
     public class Processor
     {
-        public string GetResult(List<MathMember> expression)
+        public decimal GetResult(List<MathMember> expression)
         {
             CheckExpression(expression);
 
@@ -17,11 +17,6 @@ namespace ProcessorLibrary
                 {
                     if (expression[i].Priority == priority)
                     {
-                        if (expression[i].Operation == MathOperation.Division && expression[i].Value == 0)
-                        {
-                            return "The result is not achievable, division by zero occured";
-                        }
-
                         expression[i - 1].Value = Calculate(expression[i].Operation, expression[i - 1].Value, expression[i].Value);
                         expression.Remove(expression[i]);
 
@@ -30,7 +25,7 @@ namespace ProcessorLibrary
                 }
             }
 
-            return expression[0].Value.ToString();
+            return expression[0].Value;
         }
 
         private void CheckExpression(List<MathMember> expression)
