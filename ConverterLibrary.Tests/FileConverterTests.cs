@@ -42,38 +42,44 @@ namespace ConverterLibrary.Tests
         [MemberData(nameof(WrongNumberFormatTestsData))]
         public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsFalse(string sourceLine, CultureInfo culture)
         {
-            // arrange
-            InputConverter converter = new FileConverter();
-            CultureInfo.CurrentCulture = culture;
-            string message = "Invalid expression format, the processing ended unsuccessefully";
+            if (CultureInfo.CurrentCulture.ToString() != culture.ToString())
+            {
+                // arrange
+                InputConverter converter = new FileConverter();
+                string message = "Invalid expression format, the processing ended unsuccessefully";
 
-            // act
-            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+                // act
+                CultureInfo.CurrentCulture = culture;
+                bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
 
-            // assert
-            Assert.False(isExpressionComplete);
-            Assert.Equal(message, converter.ServiceMessage);
+                // assert
+                Assert.False(isExpressionComplete);
+                Assert.Equal(message, converter.ServiceMessage);
+            }
         }
 
         [Theory]
         [MemberData(nameof(RightNumberFormatTestsData))]
         public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsTrue(string sourceLine, CultureInfo culture)
         {
-            // arrange
-            InputConverter converter = new FileConverter();
-            CultureInfo.CurrentCulture = culture;
-            List<MathMember> expression = new List<MathMember>
+            if (CultureInfo.CurrentCulture.ToString() != culture.ToString())
+            {
+                // arrange
+                InputConverter converter = new FileConverter();
+                List<MathMember> expression = new List<MathMember>
                 {
                     new MathMember(1000.10m, MathOperation.None),
                     new MathMember(1000.10m, MathOperation.Addition),
                 };
 
-            // act
-            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+                // act
+                CultureInfo.CurrentCulture = culture;
+                bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
 
-            // assert
-            Assert.True(isExpressionComplete);
-            Assert.Equal(expression, converter.MathExpression);
+                // assert
+                Assert.True(isExpressionComplete);
+                Assert.Equal(expression, converter.MathExpression);
+            }
         }
 
         public static IEnumerable<object[]> ExpressionFailedTestsData()
