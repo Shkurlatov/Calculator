@@ -68,7 +68,7 @@ namespace ConverterLibrary
 
         protected virtual bool IsSourceConverted(List<string> sections)
         {
-            MathExpression = new List<MathMember>();            
+            MathExpression = new List<MathMember>();
 
             for (int i = 1; i < sections.Count; i += 2)
             {
@@ -89,7 +89,7 @@ namespace ConverterLibrary
                 preparedSection = operation[1] + preparedSection;
             }
 
-            if (decimal.TryParse(preparedSection, out decimal value))
+            if (double.TryParse(preparedSection, out double value))
             {
                 MathExpression.Add(new MathMember(value, GetMathOperation(operation[0])));
 

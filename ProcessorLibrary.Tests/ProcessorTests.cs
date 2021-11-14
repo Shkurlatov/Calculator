@@ -9,13 +9,13 @@ namespace ProcessorLibrary.Tests
     {
         [Theory]
         [MemberData(nameof(GetResultTestsData))]
-        public void GetResult_TakesVariousExpressions_ReturnsResult(decimal expected, List<MathMember> expression)
+        public void GetResult_TakesVariousExpressions_ReturnsResult(double expected, List<MathMember> expression)
         {
             // arrange
             Processor processor = new Processor();
 
             // act
-            decimal result = processor.GetResult(expression);
+            double result = processor.GetResult(expression);
 
             // assert
             Assert.Equal(expected, result);
@@ -39,19 +39,19 @@ namespace ProcessorLibrary.Tests
         {
             yield return new object[]
             {
-                1.1214076246334310850439882697m,
+                1.1214076246334317d,
                 new List<MathMember>
                 {
-                    new MathMember(1.2m, MathOperation.None),
-                    new MathMember(4.8m, MathOperation.Subtraction),
-                    new MathMember(8.05m, MathOperation.Addition),
-                    new MathMember(5.115m, MathOperation.Division),
+                    new MathMember(1.2d, MathOperation.None),
+                    new MathMember(4.8d, MathOperation.Subtraction),
+                    new MathMember(8.05d, MathOperation.Addition),
+                    new MathMember(5.115d, MathOperation.Division),
                     new MathMember(3, MathOperation.Multiplication)
                 }
             };
             yield return new object[]
             {
-                6m,
+                6d,
                 new List<MathMember>
                 {
                     new MathMember(-1, MathOperation.None),
@@ -65,7 +65,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                33m,
+                33d,
                 new List<MathMember>
                 {
                     new MathMember(4, MathOperation.None),
@@ -79,19 +79,19 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                1.1214076246334310850439882697m,
+                1.1214076246334317d,
                 new List<MathMember>
                 {
-                    new MathMember(1.2m, MathOperation.None, 0),
-                    new MathMember(4.8m, MathOperation.Subtraction, 0),
-                    new MathMember(8.05m, MathOperation.Addition, 0),
-                    new MathMember(5.115m, MathOperation.Division, 0),
+                    new MathMember(1.2d, MathOperation.None, 0),
+                    new MathMember(4.8d, MathOperation.Subtraction, 0),
+                    new MathMember(8.05d, MathOperation.Addition, 0),
+                    new MathMember(5.115d, MathOperation.Division, 0),
                     new MathMember(3, MathOperation.Multiplication, 0)
                 }
             };
             yield return new object[]
             {
-                19m,
+                19d,
                 new List<MathMember>
                 {
                     new MathMember(-1, MathOperation.None, 0),
@@ -106,7 +106,7 @@ namespace ProcessorLibrary.Tests
             };
             yield return new object[]
             {
-                31m,
+                31d,
                 new List<MathMember>
                 {
                     new MathMember(4, MathOperation.None, 0),

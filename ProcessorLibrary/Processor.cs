@@ -7,7 +7,7 @@ namespace ProcessorLibrary
 {
     public class Processor
     {
-        public decimal GetResult(List<MathMember> expression)
+        public double GetResult(List<MathMember> expression)
         {
             CheckExpression(expression);
 
@@ -17,6 +17,11 @@ namespace ProcessorLibrary
                 {
                     if (expression[i].Priority == priority)
                     {
+                        if (expression[i].Operation == MathOperation.Division && expression[i].Value == 0)
+                        {
+                            throw new DivideByZeroException();
+                        }
+
                         expression[i - 1].Value = Calculate(expression[i].Operation, expression[i - 1].Value, expression[i].Value);
                         expression.Remove(expression[i]);
 
@@ -46,7 +51,7 @@ namespace ProcessorLibrary
             }
         }
 
-        private decimal Calculate(MathOperation operation, decimal firstValue, decimal secondValue) => operation switch
+        private double Calculate(MathOperation operation, double firstValue, double secondValue) => operation switch
         {
             MathOperation.Subtraction => firstValue - secondValue,
             MathOperation.Addition => firstValue + secondValue,

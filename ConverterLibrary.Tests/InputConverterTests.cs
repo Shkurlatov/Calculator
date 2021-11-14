@@ -68,8 +68,8 @@ namespace ConverterLibrary.Tests
                 InputConverter converter = new InputConverter();
                 List<MathMember> expression = new List<MathMember>
                 {
-                    new MathMember(1000.10m, MathOperation.None),
-                    new MathMember(1000.10m, MathOperation.Addition),
+                    new MathMember(1000.10d, MathOperation.None),
+                    new MathMember(1000.10d, MathOperation.Addition),
                 };
 
                 // act

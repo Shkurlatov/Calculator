@@ -4,20 +4,20 @@ namespace MathUnitsLibrary
 {
     public class MathMember
     {
-        public decimal Value;
+        public double Value;
         public MathOperation Operation { get; }
         public int Priority { get; }
 
         private const int _amountOperationTypes = 2;
 
-        public MathMember(decimal value, MathOperation operation, int priorityLayer)
+        public MathMember(double value, MathOperation operation, int priorityLayer)
         {
             Value = value;
             Operation = operation;
             Priority = (priorityLayer * _amountOperationTypes) + OperationPriority(operation);
         }
 
-        public MathMember(decimal value, MathOperation operation)
+        public MathMember(double value, MathOperation operation)
         {
             Value = value;
             Operation = operation;

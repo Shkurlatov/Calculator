@@ -68,7 +68,7 @@ namespace ConverterLibrary
                 preparedSection = operation[1] + preparedSection;
             }
 
-            if (decimal.TryParse(preparedSection, out decimal value))
+            if (double.TryParse(preparedSection, out double value))
             {
                 MathExpression.Add(new MathMember(value, GetMathOperation(operation[0]), priority));
 
