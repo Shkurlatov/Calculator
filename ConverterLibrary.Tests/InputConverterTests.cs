@@ -40,46 +40,40 @@ namespace ConverterLibrary.Tests
 
         [Theory]
         [MemberData(nameof(WrongNumberFormatTestsData))]
-        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsFalse(string sourceLine, CultureInfo culture)
+        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsFalse(string sourceLine, string cultureInfo)
         {
-            if (CultureInfo.CurrentCulture.ToString() != culture.ToString())
-            {
-                // arrange
-                InputConverter converter = new InputConverter();
-                string message = "Invalid expression format, the processing ended unsuccessefully";
+            // arrange
+            InputConverter converter = new InputConverter();
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureInfo);
+            string message = "Invalid expression format, the processing ended unsuccessefully";
 
-                // act
-                CultureInfo.CurrentCulture = culture;
-                bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+            // act
+            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
 
-                // assert
-                Assert.False(isExpressionComplete);
-                Assert.Equal(message, converter.ServiceMessage);
-            }
+            // assert
+            Assert.False(isExpressionComplete);
+            Assert.Equal(message, converter.ServiceMessage);
         }
 
         [Theory]
         [MemberData(nameof(RightNumberFormatTestsData))]
-        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsTrue(string sourceLine, CultureInfo culture)
+        public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsTrue(string sourceLine, string cultureInfo)
         {
-            if (CultureInfo.CurrentCulture.ToString() != culture.ToString())
-            {
-                // arrange
-                InputConverter converter = new InputConverter();
-                List<MathMember> expression = new List<MathMember>
+            // arrange
+            InputConverter converter = new InputConverter();
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(cultureInfo);
+            List<MathMember> expression = new List<MathMember>
                 {
                     new MathMember(1000.10m, MathOperation.None),
                     new MathMember(1000.10m, MathOperation.Addition),
                 };
 
-                // act
-                CultureInfo.CurrentCulture = culture;
-                bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+            // act
+            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
 
-                // assert
-                Assert.True(isExpressionComplete);
-                Assert.Equal(expression, converter.MathExpression);
-            }
+            // assert
+            Assert.True(isExpressionComplete);
+            Assert.Equal(expression, converter.MathExpression);
         }
 
         public static IEnumerable<object[]> ExpressionFailedTestsData()
@@ -148,17 +142,17 @@ namespace ConverterLibrary.Tests
             yield return new object[]
             {
                 "1 000,10 + 1 000,10",
-                new CultureInfo("en-US")
+                "en-US"
             };
             yield return new object[]
             {
                 "1,000.10 + 1,000.10",
-                new CultureInfo("es-ES")
+                "es-ES"
             };
             yield return new object[]
             {
                 "1.000,10 + 1.000,10",
-                new CultureInfo("fr-FR")
+                "fr-FR"
             };
         }
 
@@ -167,17 +161,17 @@ namespace ConverterLibrary.Tests
             yield return new object[]
             {
                 "1,000.10 + 1,000.10",
-                new CultureInfo("en-US")
+                "en-US"
             };
             yield return new object[]
             {
                 "1.000,10 + 1.000,10",
-                new CultureInfo("es-ES")
+                "es-ES"
             };
             yield return new object[]
             {
                 "1 000,10 + 1 000,10",
-                new CultureInfo("fr-FR")
+                "fr-FR"
             };
         }
     }
