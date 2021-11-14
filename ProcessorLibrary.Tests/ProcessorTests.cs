@@ -118,6 +118,18 @@ namespace ProcessorLibrary.Tests
                     new MathMember(3, MathOperation.Multiplication, 3)
                 }
             };
+            yield return new object[]
+            {
+                0d,
+                new List<MathMember>
+                {
+                    new MathMember(16, MathOperation.None, 0),
+                    new MathMember(2, MathOperation.Subtraction, 0),
+                    new MathMember(2, MathOperation.Multiplication, 0),
+                    new MathMember(1, MathOperation.Exponentiation, 0),
+                    new MathMember(2, MathOperation.Addition, 1)
+                }
+            };
         }
 
         public static IEnumerable<object[]> DivideByZeroTestsData()
@@ -137,6 +149,17 @@ namespace ProcessorLibrary.Tests
                     new MathMember(2, MathOperation.None, 0),
                     new MathMember(2, MathOperation.Division, 1),
                     new MathMember(2, MathOperation.Subtraction, 2)
+                }
+            };
+            yield return new object[]
+            {
+                new List<MathMember>
+                {
+                    new MathMember(1, MathOperation.None, 0),
+                    new MathMember(16, MathOperation.Division, 0),
+                    new MathMember(2, MathOperation.Subtraction, 1),
+                    new MathMember(2, MathOperation.Multiplication, 2),
+                    new MathMember(3, MathOperation.Exponentiation, 2)
                 }
             };
         }

@@ -89,12 +89,12 @@ namespace ConverterLibrary.Tests
             yield return new object[] { "* 1 + 2", "Wrong math operator at the begining of the string" };
             yield return new object[] { "1 + 2 +", "The math operator at the end of the string" };
             yield return new object[] { "+ + 1 + 2", "Two math operators at the begining of the string" };
-            yield return new object[] { "1 + * 2", "Operator of multiplication or division after another math operator" };
+            yield return new object[] { "1 + * 2", "Two not acceptable math operators in a row" };
             yield return new object[] { "1 + + + 2", "Three math operators in a row" };
             yield return new object[] { ")1 + 2)", "Closing brace at the begining of the string" };
             yield return new object[] { "(1 + 2(", "Opening brace at the end of the string" };
             yield return new object[] { "(1 + 2 +)", "The math operator before the closing brace" };
-            yield return new object[] { "(* 1 + 2)", "Operator of multiplication or division after the opening brace" };
+            yield return new object[] { "(* 1 + 2)", "Wrong math operator after the opening brace" };
             yield return new object[] { "(+ + 1 + 2)", "Two math operators after the opening brace" };
             yield return new object[] { "( )", "Missing value inside braces" };
             yield return new object[] { "(1 + 2) 3", "Missing math operator after the closing brace" };
@@ -158,6 +158,18 @@ namespace ConverterLibrary.Tests
                     new MathMember(4, MathOperation.Division, 2),
                     new MathMember(5, MathOperation.Multiplication, 2),
                     new MathMember(3, MathOperation.Multiplication, 3)
+                }
+            };
+            yield return new object[]
+            {
+                "16 - 2 * 2 ^ (1 + 2)",
+                new List<MathMember>
+                {
+                    new MathMember(16, MathOperation.None, 0),
+                    new MathMember(2, MathOperation.Subtraction, 0),
+                    new MathMember(2, MathOperation.Multiplication, 0),
+                    new MathMember(1, MathOperation.Exponentiation, 0),
+                    new MathMember(2, MathOperation.Addition, 1)
                 }
             };
         }

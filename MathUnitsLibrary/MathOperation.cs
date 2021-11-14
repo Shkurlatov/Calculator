@@ -7,6 +7,7 @@ namespace MathUnitsLibrary
         Subtraction,
         Addition,
         Division,
-        Multiplication
+        Multiplication,
+        Exponentiation
     }
 }

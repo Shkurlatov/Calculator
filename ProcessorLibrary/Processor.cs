@@ -57,6 +57,7 @@ namespace ProcessorLibrary
             MathOperation.Addition => firstValue + secondValue,
             MathOperation.Division => firstValue / secondValue,
             MathOperation.Multiplication => firstValue * secondValue,
+            MathOperation.Exponentiation => Math.Pow(firstValue, secondValue),
             _ => throw new ArgumentOutOfRangeException(nameof(operation), $"Not expected operation value: {operation}"),
         };
     }

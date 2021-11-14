@@ -106,6 +106,7 @@ namespace ConverterLibrary
             '+' => MathOperation.Addition,
             '/' => MathOperation.Division,
             '*' => MathOperation.Multiplication,
+            '^' => MathOperation.Exponentiation,
             _ => throw new ArgumentOutOfRangeException(nameof(operation), $"Not expected operation value: {operation}"),
         };
     }

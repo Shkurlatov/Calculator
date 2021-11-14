@@ -8,7 +8,7 @@ namespace MathUnitsLibrary
         public MathOperation Operation { get; }
         public int Priority { get; }
 
-        private const int _amountOperationTypes = 2;
+        private const int _amountOperationTypes = 3;
 
         public MathMember(double value, MathOperation operation, int priorityLayer)
         {
@@ -26,6 +26,11 @@ namespace MathUnitsLibrary
 
         private int OperationPriority(MathOperation operation)
         {
+            if (operation > MathOperation.Multiplication)
+            {
+                return 2;
+            }
+
             if (operation > MathOperation.Addition)
             {
                 return 1;

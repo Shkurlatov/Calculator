@@ -89,7 +89,7 @@ namespace ConverterLibrary.Tests
             yield return new object[] { "* 1 + 2", "Wrong math operator at the begining of the string" };
             yield return new object[] { "1 + 2 +", "The math operator at the end of the string" };
             yield return new object[] { "+ + 1 + 2", "Two math operators at the begining of the string" };
-            yield return new object[] { "1 + * 2", "Operator of multiplication or division after another math operator" };
+            yield return new object[] { "1 + * 2", "Two not acceptable math operators in a row" };
             yield return new object[] { "1 + + + 2", "Three math operators in a row" };
         }
 
@@ -139,6 +139,15 @@ namespace ConverterLibrary.Tests
                     new MathMember(4, MathOperation.Division),
                     new MathMember(5, MathOperation.Multiplication),
                     new MathMember(3, MathOperation.Multiplication)
+                }
+            };
+            yield return new object[]
+            {
+                "2 ^ 3",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(3, MathOperation.Exponentiation)
                 }
             };
         }
