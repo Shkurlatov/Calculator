@@ -39,6 +39,29 @@ namespace ConverterLibrary.Tests
         }
 
         [Theory]
+        [MemberData(nameof(ExpressionHasNegativeMembersTestsData))]
+        public void IsExpressionComplete_TakesStringsWithNegativeDoubleOperations_MakesMembersNegative(string sourceLine, List<MathMember> expression, bool[] isNegative)
+        {
+            // arrange
+            InputConverter converter = new InputConverter();
+            for (int i = 0; i < expression.Count; i++)
+            {
+                if (isNegative[i])
+                {
+                    expression[i].MakeNegative();
+                }
+            }
+
+            // act
+            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+
+            // assert
+            Assert.True(isExpressionComplete);
+            Assert.Equal(expression, converter.MathExpression);
+            Assert.Null(converter.ServiceMessage);
+        }
+
+        [Theory]
         [MemberData(nameof(WrongNumberFormatTestsData))]
         public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsFalse(string sourceLine, CultureInfo culture)
         {
@@ -101,7 +124,7 @@ namespace ConverterLibrary.Tests
                 new List<MathMember>
                 {
                     new MathMember(2, MathOperation.None),
-                    new MathMember(2, MathOperation.Addition),
+                    new MathMember(2, MathOperation.Addition)
                 }
             };
             yield return new object[]
@@ -110,7 +133,7 @@ namespace ConverterLibrary.Tests
                 new List<MathMember>
                 {
                     new MathMember(2, MathOperation.None),
-                    new MathMember(2, MathOperation.Multiplication),
+                    new MathMember(2, MathOperation.Multiplication)
                 }
             };
             yield return new object[]
@@ -149,6 +172,31 @@ namespace ConverterLibrary.Tests
                     new MathMember(2, MathOperation.None),
                     new MathMember(3, MathOperation.Exponentiation)
                 }
+            };
+        }
+
+        public static IEnumerable<object[]> ExpressionHasNegativeMembersTestsData()
+        {
+            yield return new object[]
+            {
+                "2 ^ - 3",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(3, MathOperation.Exponentiation)
+                },
+                new bool[] { false, true }
+            };
+            yield return new object[]
+            {
+                "2 ^ - 3 * + 4",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(3, MathOperation.Exponentiation),
+                    new MathMember(4, MathOperation.Multiplication)
+                },
+                new bool[] { false, true, false }
             };
         }
 

@@ -39,6 +39,29 @@ namespace ConverterLibrary.Tests
         }
 
         [Theory]
+        [MemberData(nameof(ExpressionHasNegativeMembersTestsData))]
+        public void IsExpressionComplete_TakesStringsWithNegativeDoubleOperations_MakesMembersNegative(string sourceLine, List<MathMember> expression, bool[] isNegative)
+        {
+            // arrange
+            InputConverter converter = new FileConverter();
+            for (int i = 0; i < expression.Count; i++)
+            {
+                if (isNegative[i])
+                {
+                    expression[i].MakeNegative();
+                }
+            }
+
+            // act
+            bool isExpressionComplete = converter.IsExpressionComplete(sourceLine);
+
+            // assert
+            Assert.True(isExpressionComplete);
+            Assert.Equal(expression, converter.MathExpression);
+            Assert.Null(converter.ServiceMessage);
+        }
+
+        [Theory]
         [MemberData(nameof(WrongNumberFormatTestsData))]
         public void IsExpressionComplete_ConvertVariousNumberFormats_ReturnsFalse(string sourceLine, CultureInfo culture)
         {
@@ -171,6 +194,35 @@ namespace ConverterLibrary.Tests
                     new MathMember(1, MathOperation.Exponentiation, 0),
                     new MathMember(2, MathOperation.Addition, 1)
                 }
+            };
+        }
+
+        public static IEnumerable<object[]> ExpressionHasNegativeMembersTestsData()
+        {
+            yield return new object[]
+            {
+                "2^-(3-4)+2",
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None, 0),
+                    new MathMember(3, MathOperation.Exponentiation, 0),
+                    new MathMember(4, MathOperation.Subtraction, 1),
+                    new MathMember(2, MathOperation.Addition, 0)
+                },
+                new bool[] { false, true, false, false }
+            };
+            yield return new object[]
+            {
+                "16 - 2 * - 2 ^ - (1 + 2)",
+                new List<MathMember>
+                {
+                    new MathMember(16, MathOperation.None, 0),
+                    new MathMember(2, MathOperation.Subtraction, 0),
+                    new MathMember(2, MathOperation.Multiplication, 0),
+                    new MathMember(1, MathOperation.Exponentiation, 0),
+                    new MathMember(2, MathOperation.Addition, 1)
+                },
+                new bool[] { false, false, true, true, false }
             };
         }
 

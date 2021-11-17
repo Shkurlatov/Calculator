@@ -22,6 +22,11 @@ namespace ProcessorLibrary
                             throw new DivideByZeroException();
                         }
 
+                        if (expression[i].IsNegative)
+                        {
+                            expression[i].Value = -expression[i].Value;
+                        }
+
                         expression[i - 1].Value = Calculate(expression[i].Operation, expression[i - 1].Value, expression[i].Value);
                         expression.Remove(expression[i]);
 
