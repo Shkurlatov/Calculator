@@ -14,29 +14,14 @@ namespace MathUnitsLibrary
         {
             Value = value;
             Operation = operation;
-            Priority = (priorityLayer * _amountOperationTypes) + OperationPriority(operation);
+            Priority = (priorityLayer * _amountOperationTypes) + OperationAttributes.Get<PriorityAttribute>(operation).Priority;
         }
 
         public MathMember(double value, MathOperation operation)
         {
             Value = value;
             Operation = operation;
-            Priority = OperationPriority(operation);
-        }
-
-        private int OperationPriority(MathOperation operation)
-        {
-            if (operation > MathOperation.Multiplication)
-            {
-                return 2;
-            }
-
-            if (operation > MathOperation.Addition)
-            {
-                return 1;
-            }
-
-            return 0;
+            Priority = OperationAttributes.Get<PriorityAttribute>(operation).Priority;
         }
 
         public override bool Equals(object obj)
