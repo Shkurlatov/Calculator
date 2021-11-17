@@ -7,6 +7,7 @@ namespace MathUnitsLibrary
         public double Value;
         public MathOperation Operation { get; }
         public int Priority { get; }
+        public bool IsNegative { get; private set; }
 
         private const int _amountOperationTypes = 3;
 
@@ -24,17 +25,24 @@ namespace MathUnitsLibrary
             Priority = OperationAttributes.Get<PriorityAttribute>(operation).Priority;
         }
 
+
+        public void MakeNegative()
+        {
+            IsNegative = true;
+        }
+
         public override bool Equals(object obj)
         {
             return obj is MathMember member &&
                    Value == member.Value &&
                    Operation == member.Operation &&
-                   Priority == member.Priority;
+                   Priority == member.Priority &&
+                   IsNegative == member.IsNegative;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Value, Operation, Priority);
+            return HashCode.Combine(Value, Operation, Priority, IsNegative);
         }
     }
 }

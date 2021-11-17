@@ -22,6 +22,27 @@ namespace ProcessorLibrary.Tests
         }
 
         [Theory]
+        [MemberData(nameof(GetResultWithNegativeMembersTestsData))]
+        public void GetResult_TakesExpressionsWithNegativeMathMembers_ReturnsResult(double expected, List<MathMember> expression, bool[] isNegative)
+        {
+            // arrange
+            Processor processor = new Processor();
+            for (int i = 0; i < expression.Count; i++)
+            {
+                if (isNegative[i])
+                {
+                    expression[i].MakeNegative();
+                }
+            }
+
+            // act
+            double result = processor.GetResult(expression);
+
+            // assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
         [MemberData(nameof(DivideByZeroTestsData))]
         public void GetResult_TakesVariousExpressions_DivideByZeroHappens(List<MathMember> expression)
         {
@@ -129,6 +150,56 @@ namespace ProcessorLibrary.Tests
                     new MathMember(1, MathOperation.Exponentiation, 0),
                     new MathMember(2, MathOperation.Addition, 1)
                 }
+            };
+        }
+
+        public static IEnumerable<object[]> GetResultWithNegativeMembersTestsData()
+        {
+            yield return new object[]
+            {
+                0.125d,
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(3, MathOperation.Exponentiation)
+                },
+                new bool[] { false, true }
+            };
+            yield return new object[]
+            {
+                0.5d,
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None),
+                    new MathMember(3, MathOperation.Exponentiation),
+                    new MathMember(4, MathOperation.Multiplication)
+                },
+                new bool[] { false, true, false }
+            };
+            yield return new object[]
+            {
+                4d,
+                new List<MathMember>
+                {
+                    new MathMember(2, MathOperation.None, 0),
+                    new MathMember(3, MathOperation.Exponentiation, 0),
+                    new MathMember(4, MathOperation.Subtraction, 1),
+                    new MathMember(2, MathOperation.Addition, 0)
+                },
+                new bool[] { false, true, false, false }
+            };
+            yield return new object[]
+            {
+                16.25d,
+                new List<MathMember>
+                {
+                    new MathMember(16, MathOperation.None, 0),
+                    new MathMember(2, MathOperation.Subtraction, 0),
+                    new MathMember(2, MathOperation.Multiplication, 0),
+                    new MathMember(1, MathOperation.Exponentiation, 0),
+                    new MathMember(2, MathOperation.Addition, 1)
+                },
+                new bool[] { false, false, true, true, false }
             };
         }
 

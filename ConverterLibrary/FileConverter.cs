@@ -63,14 +63,14 @@ namespace ConverterLibrary
 
         private bool TryAddMathMember(string preparedSection, string operation, int priority)
         {
-            if (operation.Length == 2)
-            {
-                preparedSection = operation[1] + preparedSection;
-            }
-
             if (double.TryParse(preparedSection, out double value))
             {
                 MathExpression.Add(new MathMember(value, GetMathOperation(operation[0]), priority));
+
+                if (operation.Length == 2 && operation[1] == '-')
+                {
+                    MathExpression.Last().MakeNegative();
+                }
 
                 return true;
             }

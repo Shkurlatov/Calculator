@@ -15,15 +15,9 @@ namespace MathUnitsLibrary
         [Priority(1)]
         Division,
         [Priority(1)]
-        DivisionNegative,
-        [Priority(1)]
         Multiplication,
-        [Priority(1)]
-        MultiplicationNegative,
         [Priority(2)]
-        Exponentiation,
-        [Priority(2)]
-        ExponentiationNegative
+        Exponentiation
     }
 
     public static class OperationAttributes
